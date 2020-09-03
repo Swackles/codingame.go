@@ -7,7 +7,7 @@ import (
 
 const baseURL = "https://www.codingame.com/services/"
 
-func new(email string, password string) (LoginResponse, error) {
+func new(email string, password string) (*LoginResponse, error) {
 	client := CodinGameClient{
 		Email:    email,
 		Password: password,
