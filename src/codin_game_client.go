@@ -1,4 +1,4 @@
-package codinGame
+package codingame
 
 import (
 	"net/http"

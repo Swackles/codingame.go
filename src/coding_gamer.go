@@ -1,4 +1,4 @@
-package codinGame
+package codingame
 
 type CodinGamer struct {
 	UserID                 int        `json:"userId"`

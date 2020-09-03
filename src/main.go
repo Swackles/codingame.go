@@ -1,4 +1,4 @@
-package codinGame
+package codingame
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 const baseURL = "https://www.codingame.com/services/"
 
-func new(email string, password string) (*LoginResponse, error) {
+func New(email string, password string) (*LoginResponse, error) {
 	client := CodinGameClient{
 		Email:    email,
 		Password: password,

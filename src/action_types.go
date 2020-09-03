@@ -1,4 +1,4 @@
-package codinGame
+package codingame
 
 type ActionTypes struct {
 	DeleteContribution                   ActionType `json:"deleteContribution"`

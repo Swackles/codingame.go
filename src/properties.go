@@ -1,4 +1,4 @@
-package codinGame
+package codingame
 
 type Properties struct {
 	TestSessionConfig          TestSessionConfig      `json:"testSessionConfig"`
