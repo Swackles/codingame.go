@@ -1,4 +1,4 @@
-package main
+package codinGame
 
 import (
 	"encoding/json"

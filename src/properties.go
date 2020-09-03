@@ -1,4 +1,4 @@
-package main
+package codinGame
 
 type Properties struct {
 	TestSessionConfig          TestSessionConfig      `json:"testSessionConfig"`
