@@ -7,7 +7,7 @@ import (
 
 const baseURL = "https://www.codingame.com/services/"
 
-func New(email string, password string) (*LoginResponse, error) {
+func New(email string, password string) (*LoginResponse, *ErrorResponse) {
 	client := CodinGameClient{
 		Email:    email,
 		Password: password,
@@ -28,16 +28,13 @@ func New(email string, password string) (*LoginResponse, error) {
  *			PuzzleResponse	-	Puzzles that came back from the request
  *			[]http.Cookies	-	Cookies that were returned back by the request
  */
-func getLastActivity(userID int, count byte, cookies []*http.Cookie) (PuzzleResponse, error) {
+func getLastActivity(userID int, count byte, cookies []*http.Cookie) (PuzzleResponse, *ErrorResponse) {
 	activityURL := baseURL + "LastActivities/getLastActivities"
 	payload := []byte(`["` + fmt.Sprint(userID) + `", "` + fmt.Sprint(count) + `"]`)
 
 	_, body, cookies, err := requestPost(activityURL, payload, cookies)
-	if err != nil {
-		return nil, err
-	}
 
 	puzzleResponse := newPuzzleResponse(body)
 
-	return puzzleResponse, nil
+	return puzzleResponse, err
 }

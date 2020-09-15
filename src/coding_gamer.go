@@ -50,11 +50,8 @@ type FormValues struct {
  *			count	-	How many activities you want to query
  *			cookies	-	HTTP cookies that are needed for the request
  */
-func (codinGamer CodinGamer) GetLastActivity(count byte) (PuzzleResponse, error) {
+func (codinGamer CodinGamer) GetLastActivity(count byte) (PuzzleResponse, *ErrorResponse) {
 	PuzzleResponse, err := getLastActivity(codinGamer.UserID, count, codinGamer.Client.Cookies)
-	if err != nil {
-		return nil, err
-	}
 
-	return PuzzleResponse, nil
+	return PuzzleResponse, err
 }

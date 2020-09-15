@@ -23,30 +23,24 @@ type Solution struct {
 	Client                          CodinGameClient
 }
 
-func (solution *Solution) GetCode() ([]byte, error) {
+func (solution *Solution) GetCode() ([]byte, *ErrorResponse) {
 	if solution.Code != "" {
 		return []byte(solution.Code), nil
 	}
 
 	newSolution, err := solution.getSolution()
-	if err != nil {
-		return nil, err
-	}
 
-	return []byte(newSolution.Code), nil
+	return []byte(newSolution.Code), err
 }
 
-func (solution *Solution) getSolution() (*Solution, error) {
+func (solution *Solution) getSolution() (*Solution, *ErrorResponse) {
 	solutionURL := baseURL + "Solution/findSolution"
 	CodinGamerId, SumbmissionID := fmt.Sprint(solution.CodingamerID), fmt.Sprint(solution.TestSessionQuestionSubmissionID)
 	payload := []byte(`[` + CodinGamerId + `, ` + SumbmissionID + `]`)
 
 	_, body, _, err := requestPost(solutionURL, payload, solution.Client.Cookies)
-	if err != nil {
-		return nil, err
-	}
 
-	return newSolution(body, solution.Client), nil
+	return newSolution(body, solution.Client), err
 }
 
 func newSolutions(body []byte, client CodinGameClient) []Solution {

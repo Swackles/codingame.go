@@ -20,20 +20,17 @@ import (
  *			[]byte					-	Response body in byte array
  *			[]http.Cookies	-	Cookies that were returned back by the request
  */
-func requestPost(url string, payload []byte, cookies []*http.Cookie) (*http.Response, []byte, []*http.Cookie, error) {
+func requestPost(url string, payload []byte, cookies []*http.Cookie) (*http.Response, []byte, []*http.Cookie, *ErrorResponse) {
 	client := createClient(url, cookies)
 
-	res, err := client.Post(url, "application/json;charset=UTF-8", bytes.NewBuffer(payload))
-	if err != nil {
-		return nil, nil, nil, err
-	}
-
+	res, _ := client.Post(url, "application/json;charset=UTF-8", bytes.NewBuffer(payload))
 	cookies = res.Cookies()
 
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
+	err := parseError(res, body)
 
-	return res, body, cookies, nil
+	return res, body, cookies, err
 }
 
 func createClient(path string, cookies []*http.Cookie) *http.Client {

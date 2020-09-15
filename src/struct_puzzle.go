@@ -90,29 +90,23 @@ func newPuzzleResponse(body []byte) PuzzleResponse {
 	return response
 }
 
-func (puzzle Puzzle) GetProgrammingLanguages(codinGamer CodinGamer) ([]AvailableLanguages, error) {
+func (puzzle Puzzle) GetProgrammingLanguages(codinGamer CodinGamer) ([]AvailableLanguages, *ErrorResponse) {
 	langURL := baseURL + "Puzzle/findAvailableProgrammingLanguages"
 	payload := []byte(`[` + fmt.Sprint(puzzle.ID) + `, ` + fmt.Sprint(codinGamer.UserID) + `]`)
 
 	_, body, _, err := requestPost(langURL, payload, puzzle.Client.Cookies)
-	if err != nil {
-		return nil, err
-	}
 
 	availableLanguages := newAvailableLanguages(body)
-	return availableLanguages, nil
+	return availableLanguages, err
 }
 
-func (puzzle Puzzle) GetSolutions(codinGamer CodinGamer, language string) ([]Solution, error) {
+func (puzzle Puzzle) GetSolutions(codinGamer CodinGamer, language string) ([]Solution, *ErrorResponse) {
 	solutionURL := baseURL + "Solution/findMySolutions"
 	gamerId, puzzleId := fmt.Sprint(codinGamer.UserID), fmt.Sprint(puzzle.ID)
 	payload := []byte(`[` + gamerId + `, ` + puzzleId + `, "` + language + `"]`)
 
 	_, body, _, err := requestPost(solutionURL, payload, puzzle.Client.Cookies)
-	if err != nil {
-		return nil, err
-	}
 
 	solution := newSolutions(body, puzzle.Client)
-	return solution, nil
+	return solution, err
 }
