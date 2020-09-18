@@ -1,5 +1,9 @@
 package codingame
 
+import (
+	"fmt"
+)
+
 type CodinGamer struct {
 	UserID                 int        `json:"userId"`
 	Email                  string     `json:"email"`
@@ -27,7 +31,6 @@ type CodinGamer struct {
 	PrivateUser            bool       `json:"privateUser"`
 	CreatedCoursesCount    int        `json:"createdCoursesCount"`
 	AlreadyAnsweredOptin   bool       `json:"alreadyAnsweredOptin"`
-	Client                 CodinGameClient
 }
 
 type FormValues struct {
@@ -51,7 +54,15 @@ type FormValues struct {
  *			cookies	-	HTTP cookies that are needed for the request
  */
 func (codinGamer CodinGamer) GetLastActivity(count byte) (PuzzleResponse, *ErrorResponse) {
-	PuzzleResponse, err := getLastActivity(codinGamer.UserID, count, codinGamer.Client.Cookies)
+	activityURL := baseURL + "LastActivities/getLastActivities"
+	payload := []byte(`["` + fmt.Sprint(codinGamer.UserID) + `", "` + fmt.Sprint(count) + `"]`)
 
-	return PuzzleResponse, err
+	_, body, err := requestPost(activityURL, payload)
+	if err != nil {
+		return nil, err
+	}
+
+	puzzleResponse := newPuzzleResponse(body)
+
+	return puzzleResponse, nil
 }

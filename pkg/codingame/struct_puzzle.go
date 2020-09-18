@@ -7,7 +7,7 @@ import (
 
 type PuzzleResponse []struct {
 	Type          string `json:"type"`
-	Puzzle        Puzzle `json:"puzzle,omitempty"`
+	Puzzle       Puzzle `json:"puzzle,omitempty"`
 	LastClashTime int64  `json:"lastClashTime,omitempty"`
 }
 
@@ -87,26 +87,28 @@ type League struct {
 func newPuzzleResponse(body []byte) PuzzleResponse {
 	var response PuzzleResponse
 	json.Unmarshal(body, &response)
+
 	return response
 }
 
-func (puzzle Puzzle) GetProgrammingLanguages(codinGamer CodinGamer) ([]AvailableLanguages, *ErrorResponse) {
+// This dosen't work for bot-programming
+func (puzzle Puzzle) GetProgrammingLanguages() ([]AvailableLanguages, *ErrorResponse) {
 	langURL := baseURL + "Puzzle/findAvailableProgrammingLanguages"
-	payload := []byte(`[` + fmt.Sprint(puzzle.ID) + `, ` + fmt.Sprint(codinGamer.UserID) + `]`)
-
-	_, body, _, err := requestPost(langURL, payload, puzzle.Client.Cookies)
+	payload := []byte(`[` + fmt.Sprint(puzzle.ID) + `, ` + fmt.Sprint(client.CodinGamerID) + `]`)
+	fmt.Println(string(payload))
+	_, body, err := requestPost(langURL, payload)
 
 	availableLanguages := newAvailableLanguages(body)
 	return availableLanguages, err
 }
 
-func (puzzle Puzzle) GetSolutions(codinGamer CodinGamer, language string) ([]Solution, *ErrorResponse) {
+func (puzzle Puzzle) GetSolutions(language string) ([]Solution, *ErrorResponse) {
 	solutionURL := baseURL + "Solution/findMySolutions"
-	gamerId, puzzleId := fmt.Sprint(codinGamer.UserID), fmt.Sprint(puzzle.ID)
+	gamerId, puzzleId := fmt.Sprint(client.CodinGamerID), fmt.Sprint(puzzle.ID)
 	payload := []byte(`[` + gamerId + `, ` + puzzleId + `, "` + language + `"]`)
 
-	_, body, _, err := requestPost(solutionURL, payload, puzzle.Client.Cookies)
+	_, body, err := requestPost(solutionURL, payload)
 
-	solution := newSolutions(body, puzzle.Client)
+	solution := newSolutions(body)
 	return solution, err
 }
