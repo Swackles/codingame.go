@@ -14,22 +14,22 @@ type CodinGameClient struct {
 /*
  * Use this to login yourself to CodinGame
  *	Inputs:
- *		email			-	CodinGame email you want to login with
- *		password	-	CodinGame password you want to login with
+ *		email			- CodinGame email you want to login with
+ *		password		- CodinGame password you want to login with
  *
  *	Output:
- *		LoginResponse		-	Response structure
- *		[]http.Cookies	-	Cookies of the request, this will be needed to
- *											do further requests
+ *		LoginResponse	- Response structure
+ * 		ErrorResponse	- Error response structure
  */
 func (client CodinGameClient) Login() (*LoginResponse, *ErrorResponse) {
 	loginUrl := baseURL + "CodingamerRemoteService/loginSiteV2"
 	payload := []byte(`["` + client.Email + `", "` + client.Password + `", true]`)
 
-	_, body, cookies, err := requestPost(loginUrl, payload, nil)
+	_, body, err := requestPost(loginUrl, payload)
+	if err != nil {
+		return nil, err
+	}
 
-	client.Cookies = cookies
-
-	LoginResponse := newLoginResponse(body, client)
-	return LoginResponse, err
+	LoginResponse := newLoginResponse(body)
+	return &LoginResponse, nil
 }

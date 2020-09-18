@@ -38,25 +38,21 @@ func (solution *Solution) getSolution() (*Solution, *ErrorResponse) {
 	CodinGamerId, SumbmissionID := fmt.Sprint(solution.CodingamerID), fmt.Sprint(solution.TestSessionQuestionSubmissionID)
 	payload := []byte(`[` + CodinGamerId + `, ` + SumbmissionID + `]`)
 
-	_, body, _, err := requestPost(solutionURL, payload, solution.Client.Cookies)
+	_, body, err := requestPost(solutionURL, payload, )
 
-	return newSolution(body, solution.Client), err
+	return newSolution(body), err
 }
 
-func newSolutions(body []byte, client CodinGameClient) []Solution {
+func newSolutions(body []byte) []Solution {
 	var response []Solution
 	json.Unmarshal(body, &response)
-
-	response = append(response, Solution{Client: client})
 
 	return response
 }
 
-func newSolution(body []byte, client CodinGameClient) *Solution {
+func newSolution(body []byte) *Solution {
 	var response *Solution
 	json.Unmarshal(body, &response)
-
-	response.Client = client
 
 	return response
 }
