@@ -20,7 +20,6 @@ type Solution struct {
 	CodingamerHandle                string `json:"codingamerHandle"`
 	Code                            string `json:"code"`
 	VotableID                       int    `json:"votableId"`
-	Client                          CodinGameClient
 }
 
 func (solution *Solution) GetCode() ([]byte, *ErrorResponse) {
